@@ -1,0 +1,89 @@
+import json
+
+library_file = "library.json"
+
+def load_library():
+        with open(library_file, "r") as file:
+            data=  json.load(file)
+        return data
+
+
+def save_library(library_data):
+    with open(library_file, "w") as file:
+        json.dump(library_data, file, indent=4)
+
+def add_book():
+    Book_id = input("Enter Book_id: ")
+    title = input("Enter title: ")
+    author = input("Enter author: ")
+    Book_quantity = input("Enter Book quantity: ")
+
+    library_data = load_library()
+    if Book_id in library_data:
+        print("Book with the given ISBN already exists.")
+    else:
+        library_data[Book_id] = {
+            "title": title,
+            "author": author,
+            "Book_quantity": Book_quantity,
+        }
+        save_library(library_data)
+        print("Book added successfully!")
+
+
+def update_book():
+    Book_id = input("Enter book_id of the book to update: ")
+    library_data = load_library()
+    book = library_data.get(Book_id)
+    if book:
+        print("Current details:")
+        print(f"Book_id: {id}, Title: {book['title']}, Author: {book['author']},Book_quantity: {book['Book_quantity']}")
+
+        title = input("Enter updated title (or press Enter to keep the same): ")
+        author = input("Enter updated author (or press Enter to keep the same): ")
+        Book_quantity= input("Enter updated genre (or press Enter to keep the same): ")
+
+        if title:
+            book['title'] = title
+        if author:
+            book['author'] = author
+        if Book_quantity:
+            book['genre'] = Book_quantity
+
+        save_library(library_data)
+        print("Book updated successfully!")
+    else:
+        print("Book not found.")
+
+def remove_book():
+    Book_id = input("Enter ISBN of the book to remove: ")
+    library_data = load_library()
+    if Book_id in library_data:
+        del library_data[Book_id]
+        save_library(library_data)
+        print("Book removed successfully!")
+    else:
+        print("Book not found.")
+
+if __name__ == "__main__":
+    while True:
+        print("\n----- Library Management System -----")
+        print("1. Add Book")
+        print("2. Update Book")
+        print("3. Remove Book")
+        print("4. Exit")
+
+        choice = input("Enter your choice (1-6): ")
+        if choice == "1":
+            add_book()
+        elif choice == "2":
+            update_book()
+        elif choice == "3":
+            remove_book()
+        elif choice == "4":
+            print("Exiting Library Management System.")
+            break
+        else:
+            print("Invalid choice. Please enter a valid option.")
+
+
